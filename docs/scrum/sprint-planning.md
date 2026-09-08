@@ -238,4 +238,3 @@
 
 ---
 
-*Documento gerado a partir de `REQUISITOS.md` e `ARQUITETURA.md`. Ajustar datas exatas de cada sprint conforme o calendário oficial da disciplina assim que definido.*
