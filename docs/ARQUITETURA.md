@@ -85,6 +85,7 @@ sequenceDiagram
 | Portal do desenvolvedor | Documentação interativa | Swagger/OpenAPI |
 | SDK/CLI | Facilita integração de squads futuros | Python (Typer) |
 | Observabilidade | Monitoramento de uptime e alertas | UptimeRobot |
+| Análise estática de segurança | SAST — bloqueia lançamento de nota se achado crítico/alto (RNF08) | a definir (ex: Bandit, Semgrep) |
 
 ## Estrutura de pastas (monorepo)
 
@@ -151,7 +152,9 @@ Adaptado de diretrizes de Clean Architecture/DDD para a stack do projeto (Python
 
 ## Decisões de arquitetura
 
-- **API versionada desde o início (`/v1/`)** para permitir evolução sem quebrar consumidores.
-- **Scraping e API desacoplados**: scrapers gravam no banco, a API só lê — nenhum endpoint dispara scraping em tempo real, evitando lentidão e dependência direta de fontes externas na hora da requisição.
-- **Sala não tem scraper próprio**: é derivada como subproduto do scraper de Disciplinas (ver RF05 em [`docs/REQUISITOS.md`](REQUISITOS.md)).
-- **Cache e rate limit na camada da API**, não no banco, para manter o banco como fonte única da verdade.
+Decisões relevantes ficam registradas individualmente como ADR em `docs/adr/` (formato descrito em [`PROCESSO.md`](PROCESSO.md)). Resumo das decisões já tomadas:
+
+- API versionada desde o início (`/v1/`)
+- Scraping e API desacoplados (scrapers gravam no banco, API só lê)
+- Sala derivada do scraper de Disciplinas, sem scraper próprio (ver RF05 em [`REQUISITOS.md`](REQUISITOS.md))
+- Cache e rate limit na camada da API, não no banco
