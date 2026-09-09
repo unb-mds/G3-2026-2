@@ -94,6 +94,8 @@ G3-2026-2/
 │   ├── app/
 │   │   ├── scrapers/        # um módulo por domínio
 │   │   ├── models/          # SQLAlchemy
+│   │   ├── schemas/         # Pydantic (request/response da API)
+│   │   ├── domain/          # lógica de negócio cross-domínio (ex: salas vazias, agenda do professor)
 │   │   ├── routers/         # endpoints por domínio, sob /v1
 │   │   ├── tasks/           # jobs Celery
 │   │   └── core/            # config, cache, rate limit
@@ -101,9 +103,12 @@ G3-2026-2/
 │   └── tests/
 ├── frontend/
 │   ├── app/                  # páginas Next.js
-│   └── components/
+│   ├── components/
+│   └── hooks/                 # lógica de chamada de API isolada dos componentes visuais
 ├── sdk/                       # pacote Python instalável
 ├── docs/                      # documentação do projeto
+├── .github/
+│   └── workflows/             # pipeline de CI/CD (RNF08)
 ├── docker-compose.yml
 └── README.md
 ```
@@ -146,9 +151,7 @@ Adaptado de diretrizes de Clean Architecture/DDD para a stack do projeto (Python
 
 ## Decisões de arquitetura
 
-
-
 - **API versionada desde o início (`/v1/`)** para permitir evolução sem quebrar consumidores.
 - **Scraping e API desacoplados**: scrapers gravam no banco, a API só lê — nenhum endpoint dispara scraping em tempo real, evitando lentidão e dependência direta de fontes externas na hora da requisição.
-- **Sala não tem scraper próprio**: é derivada como subproduto do scraper de Disciplinas (ver `docs/Cerradinho_Documento_v3.docx`, seção de modelagem de dados).
+- **Sala não tem scraper próprio**: é derivada como subproduto do scraper de Disciplinas (ver RF05 em [`docs/REQUISITOS.md`](REQUISITOS.md)).
 - **Cache e rate limit na camada da API**, não no banco, para manter o banco como fonte única da verdade.
