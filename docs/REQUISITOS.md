@@ -1,7 +1,9 @@
-# Cerradinho — API aberta da UnB
+# Cerradinho - API aberta da UnB
 
-Análise de requisitos e planejamento — MDS, UnB FCTE
+Análise de requisitos e planejamento - MDS, UnB FCTE
 Equipe: Vitor, Ítalo, Daniel, Arthur, Gabriel, João Paulo
+
+Fluxo de trabalho do time, padrões de repositório e governança de projeto estão em [`PROCESSO.md`](PROCESSO.md).
 
 ## 1. Objetivo
 
@@ -11,7 +13,7 @@ API pública que consolida dados da UnB hoje espalhados em vários sistemas: dis
 
 | Domínio | Fonte | Observação |
 |---|---|---|
-| Disciplinas | sigaa.unb.br/sigaa/public/turmas | JSF (ViewState/postback) — precisa de Playwright |
+| Disciplinas | sigaa.unb.br/sigaa/public/turmas | JSF (ViewState/postback) - precisa de Playwright |
 | Professores | Mesma página + sti.unb.br/portal-publico-sigaa | Vem junto da turma |
 | Cursos/Estrutura curricular | sigaa.unb.br/sigaa/public/curso | Complementa Disciplinas |
 | Salas/Prédios | Sem fonte própria | Extraído como subproduto do scraper de Disciplinas |
@@ -20,47 +22,47 @@ API pública que consolida dados da UnB hoje espalhados em vários sistemas: dis
 | Editais | Portal Público SIGAA (pós-graduação) | Centralizado |
 | Complemento | dadosabertos.unb.br (CKAN) | Bom para seed de Unidades/Cursos; Turmas está desatualizado (2022) |
 
-## 3. Requisitos Funcionais — Core
+## 3. Requisitos Funcionais - Core
 
 **Disciplinas**
-- RF01 — Capturar oferta de disciplinas de todas as unidades (nome, código, turma, horário, vagas), com scraper por unidade e throttling
-- RF02 — Associar disciplina a professor
-- RF03 — Associar disciplina a sala/prédio
+- RF01 - Capturar oferta de disciplinas de todas as unidades (nome, código, turma, horário, vagas), com scraper por unidade e throttling
+- RF02 - Associar disciplina a professor
+- RF03 - Associar disciplina a sala/prédio
 
 **Professores**
-- RF04 — Cadastro de docentes vinculados às disciplinas
+- RF04 - Cadastro de docentes vinculados às disciplinas
 
 **Salas/Prédios**
-- RF05 — Localização e identificação de salas e prédios (derivado de RF01)
+- RF05 - Localização e identificação de salas e prédios (derivado de RF01)
 
 **Cardápio do RU**
-- RF06 — Capturar cardápio diário
-- RF07 — Manter histórico de cardápios
+- RF06 - Capturar cardápio diário
+- RF07 - Manter histórico de cardápios
 
 **Eventos**
-- RF08 — Capturar eventos institucionais (data, local, descrição)
+- RF08 - Capturar eventos institucionais (data, local, descrição)
 
 **Editais**
-- RF09 — Capturar editais publicados (título, data, link, órgão)
+- RF09 - Capturar editais publicados (título, data, link, órgão)
 
 **API pública**
-- RF10 — Endpoints REST por domínio
-- RF11 — Documentação OpenAPI/Swagger
-- RF12 — Versionamento (`/v1/`)
-- RF13 — SDK/CLI para integração de terceiros e squads futuros
-- RF14 — Portal do desenvolvedor
+- RF10 - Endpoints REST por domínio
+- RF11 - Documentação OpenAPI/Swagger
+- RF12 - Versionamento (`/v1/`)
+- RF13 - SDK/CLI para integração de terceiros e squads futuros
+- RF14 - Portal do desenvolvedor
 
 **Atualização de dados**
-- RF15 — Agendamento automático de scraping
-- RF16 — Log de sucesso/falha de cada execução
+- RF15 - Agendamento automático de scraping
+- RF16 - Log de sucesso/falha de cada execução
 
 ## 4. Features derivadas
 
-Calculadas em cima do que os domínios acima já capturam — baixo esforço extra.
+Calculadas em cima do que os domínios acima já capturam - baixo esforço extra.
 
-- **RF17 — Salas vazias**: `GET /v1/salas/vazias?dia=segunda&horario=14:00` — cruza Sala com Disciplina no horário pedido. Só reflete aula cadastrada, não reserva informal.
-- **RF18 — Agenda do professor**: `GET /v1/professores/{nome}/agenda` — lista as turmas de um docente.
-- **RF19 — Cardápio semanal**: `GET /v1/cardapio/semana?data_inicio=...` — agrupa 7 dias de histórico.
+- **RF17 - Salas vazias**: `GET /v1/salas/vazias?dia=segunda&horario=14:00` - cruza Sala com Disciplina no horário pedido. Só reflete aula cadastrada, não reserva informal.
+- **RF18 - Agenda do professor**: `GET /v1/professores/{nome}/agenda` - lista as turmas de um docente.
+- **RF19 - Cardápio semanal**: `GET /v1/cardapio/semana?data_inicio=...` - agrupa 7 dias de histórico.
 
 ## 5. Requisitos Não-Funcionais
 
@@ -73,29 +75,21 @@ Calculadas em cima do que os domínios acima já capturam — baixo esforço ext
 | RNF05 | Resiliência | Scraper falha de forma graciosa se a fonte mudar |
 | RNF06 | Disponibilidade | Uptime confiável |
 | RNF07 | Doc viva | Documentação reflete o estado real da API |
+| RNF08 | CI/CD | Pipeline de integração contínua (lint, testes, cobertura) configurado desde o Release 1 |
+| RNF09 | Cobertura de testes | Cobertura mínima de 90% no backend, com testes de integração além dos unitários |
 
-## 6. Repositório e fluxo de Git
-
-Repositório: [github.com/unb-mds/G3-2026-2](https://github.com/unb-mds/G3-2026-2)
-
-- Monorepo — um único repositório com pastas `/frontend` e `/backend`
-- Branches: `main` (estável) → `dev` (integração) → `feature/nome-da-tarefa`
-- Commits em Conventional Commits (`feat:`, `fix:`, `docs:`, etc.)
-- Todo PR precisa de revisão antes de merge
-- Organização de tarefas via Issues + board (Projects) do GitHub
-
-## 7. Equipe
+## 6. Equipe
 
 | Pessoa | Área | Responsabilidade | Tecnologias |
 |---|---|---|---|
-| Vitor | Backend | Scraping de Disciplinas/Professores/Salas + endpoints | FastAPI, Playwright, SQLAlchemy |
+| Vitor | Backend / Scrum Master | Scraping de Disciplinas/Professores/Salas + endpoints; facilitação do squad (rituais, board) | FastAPI, Playwright, SQLAlchemy |
 | Ítalo | Backend | Scraping de RU/Eventos/Editais + endpoints | FastAPI, BeautifulSoup, SQLAlchemy |
 | Daniel | Frontend | Telas de consulta + portal do dev | Next.js, Axios, Swagger UI |
 | Arthur | Infra de jobs | Celery/Redis, cache, rate limit | Celery, Redis, slowapi |
-| Gabriel | Banco/Deploy/Scrum Master | Modelagem, Docker, deploy, facilitação do squad | PostgreSQL, SQLAlchemy, Alembic, Docker, Railway |
-| João Paulo | QA/Integração | Investigação de fontes, testes de contrato, observabilidade | DevTools, Postman, Pytest, schemathesis, UptimeRobot |
+| Gabriel | Banco/Deploy / Product Owner | Modelagem, Docker, deploy, release notes; priorização de backlog e critérios de aceitação | PostgreSQL, SQLAlchemy, Alembic, Docker, Railway |
+| João Paulo | QA/Integração | Investigação de fontes, testes de contrato, observabilidade, CI | DevTools, Postman, Pytest, schemathesis, UptimeRobot |
 
-## 8. Requisito → responsável
+## 7. Requisito → responsável
 
 | Pessoa | Requisitos |
 |---|---|
@@ -103,42 +97,36 @@ Repositório: [github.com/unb-mds/G3-2026-2](https://github.com/unb-mds/G3-2026-
 | Ítalo | RF06-09, RF19, RF13 (CLI) |
 | Daniel | RF10, RF11, RF14 |
 | Arthur | RF15, RF16, RNF01, RNF02 |
-| Gabriel | RF12, RNF06, modelagem |
-| João Paulo | RNF03, RNF04, RNF05, RNF07 |
+| Gabriel | RF12, RNF06, modelagem, release notes |
+| João Paulo | RNF03, RNF04, RNF05, RNF07, RNF08, RNF09 |
 
-## 9. Cronograma por ciclo
+## 8. Releases
 
-O projeto está dividido em 3 ciclos mensais. A quebra de cada ciclo em sprints semanais ainda será definida pelo time.
+Estrutura alinhada ao board da disciplina (Projeto 14 - Infraestrutura de Dados).
 
-### Ciclo 1 — Fundação
+### Release 1
 
-- **Vitor**: spike de viabilidade no SIGAA (Playwright), scraper de Disciplinas funcional, expansão para todas as unidades, associações Disciplina↔Professor↔Sala (RF01-05)
-- **Ítalo**: scraper de RU funcional e estabilizado, início do scraper de Eventos
-- **Daniel**: setup do Next.js, telas com dados mockados, integração com API real de RU
-- **Arthur**: sobe Celery + Redis, agenda scrapers de RU e Disciplinas, log de execuções (RF16)
-- **Gabriel**: schema inicial, Docker Compose, rotas sob /v1/, documentação das decisões de schema
-- **João Paulo**: investigação das 5 fontes de dado, relatório de risco
+Dois ou três domínios de dados com scraping agendado e OpenAPI documentada.
 
-### Ciclo 2 — Core + features derivadas
+- **Vitor**: scraper de Disciplinas (Playwright/SIGAA), associações Disciplina↔Professor↔Sala (RF01-05)
+- **Ítalo**: scraper de Cardápio do RU (RF06-07)
+- **Daniel**: telas de consulta consumindo os primeiros domínios, protótipos revisados antes da implementação
+- **Arthur**: Celery + Redis, agendamento automático dos scrapers, logs de execução (RF15-16)
+- **Gabriel**: schema inicial, Docker Compose, rotas já sob `/v1/` (RF12), documentação OpenAPI automática (RF11), release note da R1
+- **João Paulo**: investigação das fontes de dado, relatório de risco, pipeline de CI configurado desde já (RNF08), primeiros testes de contrato
 
-- **Vitor**: fecha RF04 (Professores), implementa RF17 (salas vazias) e RF18 (agenda do professor)
-- **Ítalo**: fecha Eventos e Editais, implementa RF19 (cardápio semanal)
-- **Daniel**: conecta todas as telas na API real, inclusive as features derivadas
-- **Arthur**: agenda os domínios restantes no Celery, ajusta throttling com volume real
-- **Gabriel**: migrations dos novos domínios, performance do banco, índices para RF17/RF18
-- **João Paulo**: testes de contrato em todos os domínios já publicados
+### Release 2
 
-### Ciclo 3 — Maturidade da API + entrega
+Versionamento, cache, rate limit e SDK/CLI - com portal do desenvolvedor.
 
-- **Vitor**: SDK Python
-- **Ítalo**: CLI (Typer) em cima do SDK
-- **Daniel**: portal do desenvolvedor
-- **Arthur**: cache Redis e rate limit (slowapi)
-- **Gabriel**: ambiente de produção e deploy final
-- **João Paulo**: observabilidade (UptimeRobot + alertas), testes de contrato finais, checklist board vs. entrega
+- **Vitor**: completa os domínios restantes (Professores, Salas), features derivadas RF17 (salas vazias) e RF18 (agenda do professor), SDK Python (RF13)
+- **Ítalo**: scrapers de Eventos e Editais (RF08-09), feature derivada RF19 (cardápio semanal), CLI (RF13)
+- **Daniel**: portal do desenvolvedor (RF14), telas finais das features derivadas
+- **Arthur**: cache (RNF02) e rate limit (RNF01)
+- **Gabriel**: deploy em produção, ambiente e variáveis de produção (RNF06), release note da R2
+- **João Paulo**: testes de contrato completos (RNF04), observabilidade (RNF03), cobertura de testes 90% (RNF09), checklist final board vs. entrega
 
-
-## 10. Riscos técnicos
+## 9. Riscos técnicos
 
 | Risco | Impacto |
 |---|---|
@@ -146,4 +134,3 @@ O projeto está dividido em 3 ciclos mensais. A quebra de cada ciclo em sprints 
 | Sem fonte pública de Salas | Resolvido por derivação, sem cadastro próprio |
 | Sites mudam sem aviso | Manutenção contínua (RNF05) |
 | Todas as unidades da UnB | Throttling e agendamento fora de pico; falha isolada não trava o resto |
-| Gabriel acumula técnico + Scrum Master | Risco de sobrecarga; mitigado pela distribuição de carga entre ciclos |
