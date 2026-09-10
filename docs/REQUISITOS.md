@@ -73,10 +73,12 @@ Calculadas em cima do que os domínios acima já capturam - baixo esforço extra
 | RNF03 | Observabilidade | Monitoramento de uptime e alertas |
 | RNF04 | Testes de contrato | API não pode quebrar formato esperado |
 | RNF05 | Resiliência | Scraper falha de forma graciosa se a fonte mudar |
-| RNF06 | Disponibilidade | Uptime confiável |
+| RNF06 | Disponibilidade | **Porta de qualidade obrigatória**: a nota do Release só é lançada com software implantado e acessível — não é meta de uptime, é bloqueador de avaliação |
 | RNF07 | Doc viva | Documentação reflete o estado real da API |
-| RNF08 | CI/CD | Pipeline de integração contínua (lint, testes, cobertura) configurado desde o Release 1 |
-| RNF09 | Cobertura de testes | Cobertura mínima de 90% no backend, com testes de integração além dos unitários |
+| RNF08 | CI/CD | Pipeline de integração contínua (lint, testes, cobertura, SAST) configurado desde o Release 1. Achados críticos/altos em SAST bloqueiam o lançamento da nota |
+| RNF09 | Qualidade de testes | Cobertura de linhas ≥70% no módulo de domínio; escore de mutação ≥50% nos módulos críticos; teste de sabotagem cobrindo 100% dos módulos críticos |
+
+Especificações mais detalhadas de funcionalidades específicas (quando necessário detalhar RF além do resumo aqui) ficam em `/specs`.
 
 ## 6. Equipe
 
