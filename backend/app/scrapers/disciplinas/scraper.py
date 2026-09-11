@@ -10,7 +10,9 @@ de fato ociosa, o que travava o scraper indefinidamente.
 """
 
 from __future__ import annotations
+
 import asyncio
+
 from playwright.async_api import Page, async_playwright
 
 URL_HOME = "https://sigaa.unb.br/sigaa/public/"

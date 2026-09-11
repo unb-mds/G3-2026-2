@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
+
 from app.schemas.disciplina import Horario, Professor, Sala, Turma
+
 
 def listar_unidades(html_pagina_busca: str) -> list[tuple[str, str]]:
     soup = BeautifulSoup(html_pagina_busca, "html.parser")
